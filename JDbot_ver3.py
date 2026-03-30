@@ -12,13 +12,13 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 
-# æœç´¢ç»“æœ
+# ŒŸõŒ‹‰Êƒy[ƒW
 TARGET_URL = "https://pdt.r-agent.com/pdt/app/pdt_joboffer_search_view?searchKeyword=%E3%83%87%E3%83%BC%E3%82%BF%E3%82%B5%E3%82%A4%E3%82%A8%E3%83%B3%E3%83%86%E3%82%A3%E3%82%B9%E3%83%88&searchJobtypes=1110000000,3305000000&searchPlaces=35,37,36&searchSalaryFrom=500&searchTypeOfEmployment=1&searchHoliday=1&sort=2&sn=e2005d526aa8027c084ac80c391860fe&PDT63B=undefined&PDT61C=undefined" 
 
-# æ›´æ–°æ—¥æœŸï¼šåªæŠ“å–è¯¥æ—¥æœŸåŠä¹‹åçš„æ›´æ–°
+# XV“ú:@‘üSæ?“úŠú‹y”V@“IXV
 START_DATE_LIMIT = "2026-01-01" 
 
-# ç»“æœæ–‡ä»¶(è·³è¿‡æ—¢å­˜å†…å®¹)
+# Œ‹‰Êƒtƒ@ƒCƒ‹
 CSV_FILE = "jd_data_raw.csv"
 
 
@@ -26,7 +26,6 @@ def init_driver():
     chrome_options = Options()
     chrome_options.add_argument("--disable-blink-features=AutomationControlled")
     chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
-    # å¯åŠ¨æ—¶æœ€å¤§åŒ–çª—å£ï¼Œé˜²æ­¢é®æŒ¡
     chrome_options.add_argument("--start-maximized")
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
     return driver
@@ -39,48 +38,48 @@ def get_existing_ids():
         with open(CSV_FILE, 'r', encoding='utf-8-sig') as f:
             reader = csv.DictReader(f)
             for row in reader:
-                jid = row.get('æ±‚äººç¥¨No')
+                jid = row.get('‹l•[No')
                 if jid:
                     ids.add(jid.strip())
                 else:
-                    content = row.get('å†…å®¹å…¨æ–‡', '') or row.get('åŸå§‹å…¨æ–‡', '')
+                    content = row.get('“à—e‘S•¶', '') or row.get('Œ´n‘S•¶', '')
                     id_match = re.search(r'([a-z]\d{9})|K\d{8}-\d{3}-\d{2}-\d{3}', content)
                     if id_match: ids.add(id_match.group(0))
     except Exception as e:
-        print(f"è¯»å–æ—§æ•°æ®å¼‚å¸¸: {e}")
+        print(f"?æ‹Œ”˜?í: {e}")
     return ids
 
 def parse_date(date_str):
-    match = re.search(r'(\d{4})å¹´(\d{1,2})æœˆ(\d{1,2})æ—¥', date_str)
+    match = re.search(r'(\d{4})”N(\d{1,2})Œ(\d{1,2})“ú', date_str)
     return datetime(int(match.group(1)), int(match.group(2)), int(match.group(3))) if match else None
 
 def crawl_jd():
     limit_dt = datetime.strptime(START_DATE_LIMIT, "%Y-%m-%d")
     dealt_ids = get_existing_ids() 
-    print(f"æœ¬åœ°åº“å·²è¯†åˆ«: {len(dealt_ids)} æ¡è®°å½•ã€‚")
+    print(f"–{’n?›ß??: {len(dealt_ids)} ğ??B")
 
     driver = init_driver()
     driver.get(TARGET_URL)
-    input("ã€æ“ä½œæç¤ºã€‘è¯·æ‰‹åŠ¨å®Œæˆç™»å½•å¹¶è¿›å…¥åˆ—è¡¨é¡µï¼Œç¡®è®¤çœ‹åˆ°JDå¡ç‰‡ååœ¨æ­¤æŒ‰å›è½¦...")
+    input("y‘€ì’ñ¦z?è?Š®¬“o?›ó?“ü—ñ•\?C??ŠÅ“JD?•Ğ@İŸˆÂ‰ñ?...")
 
-    # åˆå§‹åŒ–CSVå¤´
+    # ‰n‰»CSV?
     if not os.path.exists(CSV_FILE):
         with open(CSV_FILE, 'w', newline='', encoding='utf-8-sig') as f:
             writer = csv.writer(f)
-            writer.writerow(["åºå·", "æ±‚äººç¥¨No", "æ›´æ–°æ—¥æœŸ", "å†…å®¹å…¨æ–‡"])
+            writer.writerow(["˜†", "‹l•[No", "XV“úŠú", "“à—e‘S•¶"])
 
     new_saved_count = 0
     
     try:
         while True:
-            # è·å–å½“å‰å¯è§çš„æ‰€æœ‰æŒ‰é’®
+            # ?æ“–‘O‰Â?“IŠ—LˆÂ?
             wait = WebDriverWait(driver, 10)
             buttons = driver.find_elements(By.CLASS_NAME, "mod-jobList-toDetailButton")
             
             found_new_to_click = False 
 
             for btn in buttons:
-                # è·å–IDè¿›è¡Œåˆæ­¥æŸ¥é‡
+                # ?æID?s‰??d
                 href = btn.get_attribute("href")
                 id_match = re.search(r'jobofferManagementNo=([^&]+)', href)
                 jd_id = id_match.group(1) if id_match else None
@@ -88,72 +87,72 @@ def crawl_jd():
                 if not jd_id or jd_id in dealt_ids:
                     continue 
 
-                # å‘ç°æ–°ID
+                # ??VID
                 found_new_to_click = True
                 main_window = driver.current_window_handle
                 
-                # ç‰©ç†ç‚¹å‡»é€»è¾‘ï¼šå…ˆæ»šåŠ¨ï¼Œå†ç‚¹å‡»
+                # •¨—“_???Fæ??CÄ“_?
                 try:
                     driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", btn)
-                    time.sleep(0.5) # ç»™æ»šåŠ¨ä¸€ç‚¹ç¼“å†²æ—¶é—´
-                    btn.click() # ä½¿ç”¨ç‰©ç†ç‚¹å‡»
+                    time.sleep(0.5) # ???ˆê“_?™t??
+                    btn.click() # g—p•¨—“_?
                     
-                    # ç­‰å¾…æ–°çª—å£
+                    # “™‘ÒVâxŒû
                     wait.until(lambda d: len(d.window_handles) > 1)
                     driver.switch_to.window(driver.window_handles[-1])
                     
-                    # æŠ“å–å…¨æ–‡
+                    # Sæ‘S•¶
                     body_element = wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
                     full_text = body_element.text
                     
-                    # æå–æ—¥æœŸåˆ¤å®š
-                    date_match = re.search(r'æœ€çµ‚æ›´æ–°æ—¥\s*(\d{4}å¹´\d{1,2}æœˆ\d{1,2}æ—¥)', full_text)
-                    update_date_str = date_match.group(1) if date_match else "æœªçŸ¥æ—¥æœŸ"
+                    # ’ñæ“úŠú”»’è
+                    date_match = re.search(r'ÅIXV“ú\s*(\d{4}”N\d{1,2}Œ\d{1,2}“ú)', full_text)
+                    update_date_str = date_match.group(1) if date_match else "–¢’m“úŠú"
                     update_dt = parse_date(update_date_str)
 
                     if update_dt and update_dt < limit_dt:
-                        print(f"ID: {jd_id} æ›´æ–°äº {update_date_str}ï¼Œæ—©äºè®¾å®šæ—¥æœŸï¼Œè·³è¿‡ã€‚")
+                        print(f"ID: {jd_id} XV˜° {update_date_str}C‘˜°?’è“úŠúC’µ?B")
                     else:
                         with open(CSV_FILE, 'a', newline='', encoding='utf-8-sig') as f:
                             writer = csv.writer(f)
                             writer.writerow([len(dealt_ids)+1, jd_id, update_date_str, full_text.replace('\n', ' ')])
                         new_saved_count += 1
-                        print(f"æ–°å¢ä¿å­˜: {jd_id} ({update_date_str})")
+                        print(f"Vú•Û‘¶: {jd_id} ({update_date_str})")
 
                     dealt_ids.add(jd_id)
                 except Exception as e:
-                    print(f"æŠ“å– ID {jd_id} æ—¶å‡ºé”™ (å¯èƒ½å› é®æŒ¡æˆ–åŠ è½½è¶…æ—¶): {e}")
+                    print(f"Sæ ID {jd_id} ?o? (‰Â”\ˆöÕ?ˆ½‰Á?’´?): {e}")
                 finally:
                     if len(driver.window_handles) > 1:
                         driver.close()
                     driver.switch_to.window(main_window)
-                    # ç¨å¾®ä¼‘æ¯ï¼Œæé€Ÿçš„å…³é”®ï¼šç¼©çŸ­ä¸å¿…è¦çš„ sleep
+                    # âc”÷‹x‘§C’ñ‘¬“I??F?’Z•s•K—v“I sleep
                     time.sleep(random.uniform(0.8, 1.5))
 
-            # ç¿»é¡µåŠ è½½æ›´å¤š
+            # –|?‰Á?X‘½
             try:
-                # ç‰©ç†æ¨¡æ‹Ÿç‚¹å‡»â€œåŠ è½½æ›´å¤šâ€
+                # •¨—–Í?“_?g‰Á?X‘½h
                 load_more_btn = driver.find_element(By.CSS_SELECTOR, ".mod-loadMore-text")
                 driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", load_more_btn)
                 time.sleep(1)
                 
-                # å…ˆå°è¯•å¸¸è§„ç‚¹å‡»ï¼Œå¦‚æœè¢«æŒ¡ä½ï¼ŒæŠ¥é”™ä¼šè¢«æ•è·
+                # æ??í?“_?C”@‰Ê”í?ZC??‰ï”í•ß?
                 load_more_btn.click()
-                print("--- å·²ç‚¹å‡»åŠ è½½æ›´å¤šï¼Œç­‰å¾…å†…å®¹åˆ·æ–° ---")
+                print("--- ›ß“_?‰Á?X‘½C“™‘Ò“à—eüV ---")
                 time.sleep(4) 
             except Exception:
-                # å¦‚æœç‰©ç†ç‚¹å‡»å¤±è´¥ï¼ˆæ¯”å¦‚çœŸçš„è¢«æŒ¡ä½äº†ï¼‰ï¼Œä¸”å½“å‰å±æ²¡æœ‰æ–°å†…å®¹ç‚¹ï¼Œè¯´æ˜åˆ°å¤´äº†
+                # ”@‰Ê•¨—“_?¸?i”ä”@^“I”í?Z—¹jCŠ“–‘O› –v—LV“à—e“_C?–¾“?—¹
                 if not found_new_to_click:
-                    print("å·²åˆ°è¾¾åˆ—è¡¨åº•éƒ¨æˆ–æ— æ³•ç»§ç»­ç‚¹å‡»ã€‚")
+                    print("›ß“?—ñ•\’ê•”ˆ½Ù–@??“_?B")
                     break
                 else:
-                    # å¦‚æœæ˜¯å› ä¸ºç½‘ç»œæ…¢æŒ‰é’®æ²¡å‡ºæ¥ï¼Œå†ç­‰ä¸€ä¼š
+                    # ”@‰Ê¥ˆö?ã¤?–ˆÂ?–vo—ˆCÄ“™ˆê‰ï
                     time.sleep(2)
                     continue
 
     finally:
         driver.quit()
-        print(f"ä»»åŠ¡ç»“æŸã€‚ç›®å‰åº“æ€»è®¡: {len(dealt_ids)} æ¡ï¼Œæœ¬æ¬¡æ–°å¢: {new_saved_count} æ¡ã€‚")
+        print(f"”C??‘©B–Ú‘O???: {len(dealt_ids)} ğC–{ŸVú: {new_saved_count} ğB")
 
 if __name__ == "__main__":
     crawl_jd()
