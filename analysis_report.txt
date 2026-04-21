@@ -1,0 +1,105 @@
+
+=== 岗位分布 ===
+role_type
+OTHER         381
+CONSULTANT    380
+DS            290
+DE            101
+DA             90
+BI             11
+Name: count, dtype: int64
+
+
+
+=== remote_flag分布 ===
+remote_flag
+REMOTE     940
+UNKNOWN    270
+ONSITE      43
+Name: count, dtype: int64
+
+
+
+=== 经验年数分布 ===
+experience_years
+1     788
+3     193
+2     126
+5      96
+0      28
+7       7
+8       6
+4       5
+10      3
+6       1
+Name: count, dtype: int64
+
+
+
+=== Level 分布统计 ===
+level
+mid        570
+senior     351
+manager    217
+junior     115
+Name: count, dtype: int64
+
+
+--- 技能关键词统计分析 ---
+                   出现次数  出现频率 (%)
+exp_マーケティング         378     30.17
+exp_データ分析           293     23.38
+exp_機械学習            162     12.93
+exp_英語              143     11.41
+exp_クラウド            126     10.06
+exp_Python          124      9.90
+exp_AWS              84      6.70
+exp_生成AI             78      6.23
+exp_SQL              74      5.91
+exp_要件定義             67      5.35
+exp_AI               58      4.63
+exp_R                47      3.75
+exp_データサイエンス         43      3.43
+exp_Tableau          40      3.19
+exp_GCP              39      3.11
+exp_Azure            38      3.03
+exp_BIツール            36      2.87
+exp_Java             22      1.76
+exp_ETL              21      1.68
+exp_統計解析             21      1.68
+exp_設計               18      1.44
+exp_自然言語処理           18      1.44
+exp_DWH              18      1.44
+exp_深層学習             16      1.28
+exp_ディープラーニング        14      1.12
+exp_Power BI         13      1.04
+exp_LLM              10      0.80
+exp_PyTorch           8      0.64
+exp_画像処理              8      0.64
+exp_TensorFlow        8      0.64
+exp_TOEIC             5      0.40
+exp_C++               4      0.32
+exp_scikit-learn      4      0.32
+exp_MATLAB            2      0.16
+exp_ビジネスコミュニケーション     2      0.16
+exp_信号処理              1      0.08
+
+
+--- 工作内容统计分析 ---
+           出现次数  出现频率 (%)
+job_课题解决    561     44.77
+job_部门协作    417     33.28
+job_品牌推广    241     19.23
+job_可视化     236     18.83
+job_战略立案    211     16.84
+job_KPI管理   200     15.96
+job_系统设计    170     13.57
+job_市场调查    133     10.61
+job_营销CRM   132     10.53
+job_算法实现    129     10.30
+job_DX推进    116      9.26
+job_基盘构建    103      8.22
+job_统计分析     72      5.75
+job_数据清洗     47      3.75
+job_IoT相关    23      1.84
+

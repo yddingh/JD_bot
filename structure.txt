@@ -1,7 +1,0 @@
-
-新data→ [日期].csv
-
-[日期].csv→(data-cleansing.py)→ structed_data_日期.csv
-
-structed_data_日期.csv→(one_hot_cleasing.py)→ one_hot_日期.csv
-									      → 数据分析报告
