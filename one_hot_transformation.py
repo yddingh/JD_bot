@@ -1,5 +1,5 @@
-
 import pandas as pd
+import numpy as np
 import re
 
 report_lines = []
@@ -143,8 +143,84 @@ df["remote_score"] = res[1]
 
 
 
-
 # =====3. 年收=====
+def extract_salary(salary_text):
+
+    if pd.isna(salary_text) or salary_text == "":
+        return np.nan, np.nan, np.nan
+
+    text = str(salary_text).replace(" ", "").replace(",", "")
+
+    # 500万円～900万円
+    pattern = r'(\d{3,4})(?:万円|万)?(?:～|-|~)(\d{3,4})(?:万円|万)?'
+
+    match = re.search(pattern, text)
+
+    if match:
+        try:
+            s_min = int(match.group(1))
+            s_max = int(match.group(2))
+            s_avg = (s_min + s_max) / 2
+
+            return s_min, s_max, s_avg
+
+        except:
+            return np.nan, np.nan, np.nan
+
+    # 单值兜底
+    single_pattern = r'(\d{3,4})万円'
+
+    single_match = re.search(single_pattern, text)
+
+    if single_match:
+        try:
+            s_min = int(single_match.group(1))
+
+            return s_min, np.nan, np.nan
+
+        except:
+            pass
+
+    return np.nan, np.nan, np.nan
+
+
+salary_data = df["給与"].apply(extract_salary)
+
+df[["salary_min", "salary_max", "salary_avg"]] = pd.DataFrame(
+    salary_data.tolist(),
+    index=df.index
+)
+
+
+for col in ["salary_min", "salary_max", "salary_avg"]:
+
+    df[col] = pd.to_numeric(df[col], errors="coerce")
+
+
+
+bins = list(range(0, 2000, 100))
+
+labels = [f"{i}-{i+100}" for i in bins[:-1]]
+
+df["salary_bin"] = pd.cut(
+    df["salary_avg"],
+    bins=bins,
+    labels=labels,
+    right=False
+)
+
+
+df["salary_bin_order"] = pd.cut(df["salary_avg"],bins=bins,labels=range(len(labels)),right=False)
+
+df["salary_bin"] = df["salary_bin"].astype(str)
+
+salary_dist_df = (df["salary_bin"].value_counts(dropna=False).sort_index().to_frame(name="count"))
+
+salary_dist_df["ratio"] = (salary_dist_df["count"] / salary_dist_df["count"].sum())
+
+
+"""
+
 def extract_salary(salary_text):
     if pd.isna(salary_text) or salary_text == "":
         return "UNKNOWN", "UNKNOWN", "UNKNOWN"
@@ -226,7 +302,7 @@ salary_dist_df = pd.DataFrame({
     "count": salary_dist,
     "ratio": salary_dist_ratio
 })
-
+"""
 
 
 
