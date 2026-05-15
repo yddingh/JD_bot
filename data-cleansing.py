@@ -1,8 +1,8 @@
-# %%
+
 import pandas as pd
 import re
-df = pd.read_csv('full_data.csv', encoding='utf-8')
 
+df = pd.read_csv('full_data.csv', encoding='utf-8')
 
 # 清洗全文
 
@@ -14,8 +14,7 @@ def clean_content(text):
     text = text.replace('NEW ', '')
     
     # 任务2：删除 "求人票No ... あとからチェックしたい方は 気になる" 之后的所有内容
-    # 我们定位到 "気になる" 这个关键词并截断
-    # 如果关键词非常固定，可以使用 split
+    # 定位到 "気になる" 这个关键词并截断
     keyword = "あとからチェックしたい方は 気になる"
     if keyword in text:
         text = text.split(keyword)[0]
@@ -36,14 +35,10 @@ def extract_advanced(text):
     if not isinstance(text, str):
         return None, None
 
-    # 1. 扩充公司特征：加入“相互会社”并明确包含全角空格
-    # \S* 表示匹配非空白字符（含全角字符）
     company_pattern = r"(\S*(?:株式会社|合同会社|有限会社|相互会社|（株）|\(株\))\S*)"
     
-    # 2. 护城河标签：同样适配全角/半角空格
     stop_tags = r"(?:業界未経験|フレックス|年間休日|土曜出勤なし|正社員|想定年収|勤務地)"
     
-    # 3. 核心正则表达式改动：
     # ^\s* : 容错开头可能存在的换行或不可见字符
     # (.*?) : 职位名
     # [ \s　]+ : 匹配半角、全角或Tab空格
@@ -75,17 +70,21 @@ df[['Position', '会社名']] = df['内容全文'].apply(lambda x: pd.Series(ext
 
 
 
+
 # 提取其他信息
 def extract_fields(text):
-    # 这里的 text 已经是之前处理过的（删除了 NEW 和 尾部冗余）
     clean_text = text
-
     
     if not isinstance(clean_text, str) or clean_text.strip() == "":
         return pd.Series([''] * 9)
+    
+    # 提取员工人数
+    emp_count_match = re.search(r'従業員数[\s　]*([0-9,]+)', clean_text)
+    emp_count = emp_count_match.group(1) if emp_count_match else ""
 
-    # === 3. 提取在宅/Remote 关键词 (优化版) ===
-    # 加入了 ハイブリッド、出社 等关键词，并捕捉前后 25 个字符以获取更完整的语境（如：原则出社、不可等）
+
+    # === 提取在宅/Remote ===
+    # 捕捉前后 25 个字符以获取更完整的语境（如：原则出社、不可等）
     # 使用 re.IGNORECASE 以防万一有英文大写
     pattern = r'(.{0,5}(?:在宅|リモート|テレワーク|ハイブリッド|出社).{0,25})'
     remote_keywords = re.findall(pattern, clean_text)
@@ -95,6 +94,7 @@ def extract_fields(text):
         remote_info = " || ".join(dict.fromkeys([k.strip() for k in remote_keywords]))
     else:
         remote_info = "无匹配"
+
 
     # === 4. 提取特定段落 ===
     def extract_between(source, start_str, end_str):
@@ -108,6 +108,8 @@ def extract_fields(text):
             return source[start_idx:].strip()[:500] 
         return source[start_idx:end_idx].strip()
 
+
+
     job_content = extract_between(clean_text, "仕事の内容", "配属先情報")
     dept_info = extract_between(clean_text, "配属先情報", "必要な能力・経験")
     requirements = extract_between(clean_text, "必要な能力・経験", "勤務地") 
@@ -115,9 +117,6 @@ def extract_fields(text):
     work_hours = extract_between(clean_text, "就業時間", "通勤手当")
     selection = extract_between(clean_text, "選考内容", "企業情報")
     
-    # 提取员工人数
-    emp_count_match = re.search(r'従業員数[\s　]*([0-9,]+)', clean_text)
-    emp_count = emp_count_match.group(1) if emp_count_match else ""
 
     return pd.Series([
         emp_count, 
@@ -131,7 +130,6 @@ def extract_fields(text):
         clean_text
     ])
 
-# 应用函数到 DataFrame
 columns = [
     '従業員数',
     '在宅可否', 
@@ -146,7 +144,7 @@ columns = [
 
 df[columns] = df['内容全文'].apply(extract_fields)
 
-# 只有在确定不再需要原始列时才 drop
+
 if '内容全文' in df.columns:
     df = df.drop(columns = ['内容全文'])
 
