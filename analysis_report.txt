@@ -1,32 +1,32 @@
 
 === Employee Size Distribution ===
 employee_bin
-0-100         359
-100-500       332
-500-1000      119
-1000-10000    287
-10000+        156
+0-100         514
+100-500       529
+500-1000      169
+1000-10000    456
+10000+        274
 Name: count, dtype: int64
 
 
 
 === Position Type ===
 Position_Type
-BI             11
-CONSULTANT    380
-DA             90
-DE            101
-DS            290
-OTHER         381
+BI             21
+CONSULTANT    583
+DA            126
+DE            142
+DS            463
+OTHER         607
 Name: count, dtype: int64
 
 
 
 === Remote Work ===
 remote_flag
-REMOTE     940
-UNKNOWN    270
-ONSITE      43
+REMOTE     1463
+UNKNOWN     408
+ONSITE       71
 Name: count, dtype: int64
 
 
@@ -34,105 +34,106 @@ Name: count, dtype: int64
 === Salary Distribution ===
             count     ratio
 salary_bin                 
-1000-1100     102  0.081405
-1100-1200      38  0.030327
-1200-1300      22  0.017558
-1300-1400      15  0.011971
-1400-1500       6  0.004789
-1500-1600       5  0.003990
-1600-1700       2  0.001596
-300-400        14  0.011173
-400-500        86  0.068635
-500-600       203  0.162011
-600-700       257  0.205108
-700-800       190  0.151636
-800-900       179  0.142857
-900-1000      102  0.081405
-nan            32  0.025539
+1000-1100     144  0.074150
+1100-1200      67  0.034501
+1200-1300      36  0.018538
+1300-1400      31  0.015963
+1400-1500      11  0.005664
+1500-1600      13  0.006694
+1600-1700       3  0.001545
+1700-1800       1  0.000515
+300-400        17  0.008754
+400-500       123  0.063337
+500-600       318  0.163749
+600-700       384  0.197734
+700-800       307  0.158084
+800-900       259  0.133368
+900-1000      178  0.091658
+nan            50  0.025747
 
 
 
 === Experience ===
 experience_years
-0      28
-1     788
-2     126
-3     193
-4       5
-5      96
-6       1
-7       7
-8       6
-10      3
+0       43
+1     1238
+2      177
+3      297
+4        9
+5      151
+6        1
+7        9
+8        6
+10      11
 Name: count, dtype: int64
 
 
 
 === Level ===
 level
-junior     115
-manager    217
-mid        570
-senior     351
+junior     166
+manager    349
+mid        882
+senior     545
 Name: count, dtype: int64
 
 
 
 === Skill ===
                    frequency  percentage (%)
-exp_マーケティング              378           30.17
-exp_データ分析                293           23.38
-exp_機械学習                 162           12.93
-exp_英語                   143           11.41
-exp_クラウド                 126           10.06
-exp_Python               124            9.90
-exp_AWS                   84            6.70
-exp_生成AI                  78            6.23
-exp_SQL                   74            5.91
-exp_要件定義                  67            5.35
-exp_AI                    58            4.63
-exp_R                     47            3.75
-exp_データサイエンス              43            3.43
-exp_Tableau               40            3.19
-exp_GCP                   39            3.11
-exp_Azure                 38            3.03
-exp_BIツール                 36            2.87
-exp_Java                  22            1.76
-exp_ETL                   21            1.68
-exp_統計解析                  21            1.68
-exp_設計                    18            1.44
-exp_自然言語処理                18            1.44
-exp_DWH                   18            1.44
-exp_深層学習                  16            1.28
-exp_ディープラーニング             14            1.12
-exp_Power BI              13            1.04
-exp_LLM                   10            0.80
-exp_PyTorch                8            0.64
-exp_画像処理                   8            0.64
-exp_TensorFlow             8            0.64
-exp_TOEIC                  5            0.40
-exp_C++                    4            0.32
-exp_scikit-learn           4            0.32
-exp_MATLAB                 2            0.16
-exp_ビジネスコミュニケーション          2            0.16
-exp_信号処理                   1            0.08
+exp_マーケティング              560           28.84
+exp_データ分析                451           23.22
+exp_機械学習                 249           12.82
+exp_英語                   223           11.48
+exp_Python               196           10.09
+exp_クラウド                 185            9.53
+exp_生成AI                 139            7.16
+exp_AWS                  123            6.33
+exp_SQL                  103            5.30
+exp_要件定義                 100            5.15
+exp_AI                    90            4.63
+exp_R                     68            3.50
+exp_Azure                 65            3.35
+exp_データサイエンス              63            3.24
+exp_GCP                   59            3.04
+exp_Tableau               56            2.88
+exp_BIツール                 49            2.52
+exp_Java                  33            1.70
+exp_深層学習                  32            1.65
+exp_統計解析                  32            1.65
+exp_ETL                   28            1.44
+exp_設計                    28            1.44
+exp_自然言語処理                28            1.44
+exp_DWH                   24            1.24
+exp_LLM                   21            1.08
+exp_ディープラーニング             19            0.98
+exp_Power BI              18            0.93
+exp_TOEIC                 13            0.67
+exp_PyTorch               10            0.51
+exp_画像処理                   9            0.46
+exp_TensorFlow             9            0.46
+exp_ビジネスコミュニケーション          6            0.31
+exp_scikit-learn           6            0.31
+exp_C++                    4            0.21
+exp_MATLAB                 4            0.21
+exp_信号処理                   4            0.21
 
 
 
 === Job Duties ===
              frequency  percentage (%)
-job_課題解決           561           44.77
-job_市場分析           487           38.87
-job_可視化            276           22.03
-job_营销             241           19.23
-job_戦略立案           211           16.84
-job_KPI            200           15.96
-job_システム開発         166           13.25
-job_アルゴリズム         129           10.30
-job_DX推进           116            9.26
-job_データ基盤構築        103            8.22
-job_統計解析            88            7.02
-job_CRM             87            6.94
-job_データ加工           47            3.75
-job_IoT             23            1.84
+job_課題解決           864           44.49
+job_市場分析           707           36.41
+job_可視化            411           21.16
+job_营销             356           18.33
+job_戦略立案           326           16.79
+job_KPI            283           14.57
+job_システム開発         256           13.18
+job_アルゴリズム         218           11.23
+job_DX推进           175            9.01
+job_データ基盤構築        155            7.98
+job_CRM            131            6.75
+job_統計解析           119            6.13
+job_データ加工           73            3.76
+job_IoT             44            2.27
 

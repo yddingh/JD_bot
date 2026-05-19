@@ -468,11 +468,12 @@ log_print("\n=== Job Duties ===", job_summary_df)
 
 
 
-#=========drop=========
-drop_cols = ['序号', '更新日', 'Position', '会社名', '従業員数', '在宅可否', 
-             '給与',  '配属部门', '就業時間', '選考内容', '清洗后全文','必要経験', '仕事内容']
-df = df.drop(columns=[c for c in drop_cols if c in df.columns])
+# #=========drop=========
+# drop_cols = ['序号', '更新日', 'Position', '会社名', '従業員数', '在宅可否', 
+#              '給与',  '配属部门', '就業時間', '選考内容', '清洗后全文','必要経験', '仕事内容']
+# df = df.drop(columns=[c for c in drop_cols if c in df.columns])
+
 df.to_csv('one_hot.csv', index=False, encoding='utf-8-sig')
 
 with open("analysis_report.txt", "w", encoding="utf-8") as f:
-    f.write("\n".join(report_lines))
+     f.write("\n".join(report_lines))
