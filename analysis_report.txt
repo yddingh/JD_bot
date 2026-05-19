@@ -1,4 +1,15 @@
 
+=== Employee Size Distribution ===
+employee_bin
+0-100         359
+100-500       332
+500-1000      119
+1000-10000    287
+10000+        156
+Name: count, dtype: int64
+
+
+
 === Position Type ===
 Position_Type
 BI             11

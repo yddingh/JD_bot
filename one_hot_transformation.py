@@ -77,6 +77,40 @@ def classify_role(title):
         
 df["Position_Type"] = df["Position"].apply(classify_role)
 
+# ===== 従業員数 分箱 =====
+df["従業員数"] = (
+    df["従業員数"]
+    .astype(str)
+    .str.replace(",", "", regex=False)
+)
+
+# 转成数值（防止空值或异常）
+df["従業員数"] = pd.to_numeric(df["従業員数"], errors="coerce")
+
+# 分箱区间
+bins = [0, 100, 500, 1000, 10000, float("inf")]
+labels = ["0-100", "100-500", "500-1000", "1000-10000", "10000+"]
+
+# 创建分类列
+df["employee_bin"] = pd.cut(
+    df["従業員数"],
+    bins=bins,
+    labels=labels,
+    right=False
+)
+
+# Power BI 排序辅助列
+df["employee_bin_order"] = pd.cut(
+    df["従業員数"],
+    bins=bins,
+    labels=range(len(labels)),
+    right=False
+)
+
+# 转成整数（可选）
+df["employee_bin_order"] = df["employee_bin_order"].astype("Int64")
+
+
 
 
 # ===== 2.在宅情况 =====
@@ -218,91 +252,6 @@ salary_dist_df = (df["salary_bin"].value_counts(dropna=False).sort_index().to_fr
 
 salary_dist_df["ratio"] = (salary_dist_df["count"] / salary_dist_df["count"].sum())
 
-
-"""
-
-def extract_salary(salary_text):
-    if pd.isna(salary_text) or salary_text == "":
-        return "UNKNOWN", "UNKNOWN", "UNKNOWN"
-    
-    # 统一转为字符串并去掉空格
-    text = str(salary_text).replace(" ", "").replace(",", "")
-    
-    # 正则表达式：匹配 500万円～900万円 这种格式
-    # 允许匹配：500万, 500万円, 500~900, 500-900 等变体
-    pattern = r'(\d{3,4})(?:万円|万)?(?:～|-|~)(\d{3,4})(?:万円|万)?'
-    match = re.search(pattern, text)
-    
-    if match:
-        try:
-            s_min = int(match.group(1))
-            s_max = int(match.group(2))
-            s_avg = (s_min + s_max) / 2
-            return s_min, s_max, s_avg
-        except ValueError:
-            return "UNKNOWN", "UNKNOWN", "UNKNOWN"
-    
-    # 兜底逻辑：如果只有单值（如 500万円～）
-    single_pattern = r'(\d{3,4})万円'
-    single_match = re.search(single_pattern, text)
-    if single_match:
-        try:
-            s_min = int(single_match.group(1))
-            return s_min, "UNKNOWN", "UNKNOWN"
-        except ValueError:
-            pass
-
-    return "UNKNOWN", "UNKNOWN", "UNKNOWN"
-
-# 应用清洗
-salary_data = df["給与"].apply(extract_salary)
-
-# 将结果展开到三列
-df[['salary_min', 'salary_max', 'salary_avg']] = pd.DataFrame(salary_data.tolist(), index=df.index)
-
-
-# UNKNOWN 占比
-total_count = len(df)
-unknown_count = (df["salary_min"] == "UNKNOWN").sum()
-unknown_ratio = unknown_count / total_count
-
-salary_unknown_df = pd.DataFrame({
-    "count": [unknown_count, total_count - unknown_count],
-    "ratio": [unknown_ratio, 1 - unknown_ratio]
-}, index=["UNKNOWN", "KNOWN"])
-
-
-# 薪资分布（按 100 万分箱）
-
-# 只取有效数据
-salary_valid = df[df["salary_min"] != "UNKNOWN"].copy()
-
-# 转成数值
-salary_valid["salary_min"] = salary_valid["salary_min"].astype(int)
-
-# 分箱（100 万为单位）
-bins = list(range(0, 2000, 100))  
-labels = [f"{i}-{i+100}" for i in bins[:-1]]
-
-salary_valid["salary_bin"] = pd.cut(
-    salary_valid["salary_min"],
-    bins=bins,
-    labels=labels,
-    right=False
-)
-
-# 统计数量
-salary_dist = salary_valid["salary_bin"].value_counts().sort_index()
-
-# 转成占比
-salary_dist_ratio = salary_dist / salary_dist.sum()
-
-# 合并成 DataFrame
-salary_dist_df = pd.DataFrame({
-    "count": salary_dist,
-    "ratio": salary_dist_ratio
-})
-"""
 
 
 
@@ -500,6 +449,8 @@ job_summary_df = job_summary_df.sort_values(by='frequency', ascending=False)
 
 
 #=========print=========
+log_print("\n=== Employee Size Distribution ===",df["employee_bin"].value_counts().sort_index())
+
 log_print("\n=== Position Type ===", df["Position_Type"].value_counts().sort_index())
 
 log_print("\n=== Remote Work ===", df["remote_flag"].value_counts())
@@ -513,6 +464,7 @@ log_print("\n=== Level ===", df["level"].value_counts().sort_index())
 log_print("\n=== Skill ===", skill_summary_df)
 
 log_print("\n=== Job Duties ===", job_summary_df)
+
 
 
 
